@@ -1,550 +1,256 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8" />
-    <title>mrezno_sjediste</title>
-</head>
-
-
-<body>
-    <h1>Juraj Hadviger 4.D</h1>
-
-    <!DOCTYPE html>
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kriptografija u računalnoj komunikaciji</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #1a1410;
-    --paper: #f5f0e8;
-    --paper-dark: #ede7d6;
-    --accent: #8b1a1a;
-    --accent-light: #c0392b;
-    --gold: #c9952a;
-    --muted: #6b5e4e;
-    --border: #c8b89a;
-    --code-bg: #2a1f1a;
-    --code-fg: #e8d5a3;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.8;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #222;
+    background: #fff;
+    max-width: 780px;
+    margin: 40px auto;
+    padding: 0 20px 60px;
   }
 
-  /* ── HEADER ── */
-  header {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 3rem 2rem 2.5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 20px,
-      rgba(255,255,255,0.015) 20px,
-      rgba(255,255,255,0.015) 21px
-    );
-  }
-  .header-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    opacity: 0.9;
-  }
-  header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    line-height: 1.15;
-    max-width: 760px;
-    margin: 0 auto 1rem;
-    font-weight: 400;
-  }
-  header h1 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-  .header-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: rgba(245,240,232,0.5);
-    letter-spacing: 0.1em;
-    margin-top: 1.5rem;
-  }
-  .ornament {
-    color: var(--gold);
-    font-size: 1.4rem;
-    margin: 0 0.5rem;
-    opacity: 0.7;
+  h1 {
+    font-size: 1.9rem;
+    margin-bottom: 0.3rem;
   }
 
-  /* ── LAYOUT ── */
-  .page {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 0 1.5rem 4rem;
-  }
-
-  /* ── TOC ── */
-  .toc {
-    background: var(--paper-dark);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--accent);
-    margin: 2.5rem 0;
-    padding: 1.8rem 2rem;
-  }
-  .toc-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-  }
-  .toc ol {
-    padding-left: 1.2rem;
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 2;
-  }
-  .toc a {
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--border);
-    transition: color 0.2s;
-  }
-  .toc a:hover { color: var(--accent); }
-
-  /* ── SECTIONS ── */
-  section {
-    margin-top: 2.8rem;
-    animation: fadeUp 0.5s ease both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .meta {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 2rem;
   }
 
   h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.7rem;
-    font-weight: 400;
-    color: var(--accent);
-    border-bottom: 1.5px solid var(--border);
-    padding-bottom: 0.4rem;
-    margin-bottom: 1.2rem;
-    scroll-margin-top: 1.5rem;
-  }
-  h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.15rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin: 1.6rem 0 0.6rem;
-    padding-left: 0.8rem;
-    border-left: 3px solid var(--gold);
-  }
-
-  p { margin-bottom: 1rem; }
-
-  /* ── INLINE LINKS ── */
-  a {
-    color: var(--accent-light);
-    text-decoration: none;
-    border-bottom: 1px solid currentColor;
-    transition: opacity 0.2s;
-  }
-  a:hover { opacity: 0.7; }
-
-  /* ── CALLOUT / CIPHER BOX ── */
-  .callout {
-    background: var(--code-bg);
-    color: var(--code-fg);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    padding: 1.4rem 1.6rem;
-    margin: 1.4rem 0;
-    border-radius: 2px;
-    line-height: 1.7;
-    position: relative;
-    overflow-x: auto;
-  }
-  .callout .tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
+    font-size: 1.25rem;
+    margin-top: 2.2rem;
     margin-bottom: 0.5rem;
-    display: block;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.2rem;
   }
 
-  /* ── INFO BOX ── */
-  .infobox {
-    background: var(--paper-dark);
-    border: 1px solid var(--border);
-    padding: 1.2rem 1.5rem;
-    margin: 1.4rem 0;
+  h3 {
+    font-size: 1rem;
+    margin-top: 1.4rem;
+    margin-bottom: 0.3rem;
+  }
+
+  p { margin-bottom: 0.9rem; }
+
+  a { color: #1a0dab; }
+
+  nav {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 1rem 1.4rem;
+    margin-bottom: 2rem;
     font-size: 0.93rem;
-    color: var(--muted);
-    position: relative;
   }
-  .infobox strong { color: var(--ink); }
+  nav p { margin: 0 0 0.4rem; font-weight: bold; }
+  nav ol { margin: 0; padding-left: 1.3rem; }
+  nav li { margin-bottom: 0.2rem; }
 
-  /* ── COMPARISON TABLE ── */
+  pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 0.9rem 1.1rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.4rem 0;
+    margin: 1rem 0;
     font-size: 0.92rem;
   }
   th {
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.7rem 1rem;
+    background: #eee;
     text-align: left;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #ccc;
   }
   td {
-    padding: 0.65rem 1rem;
-    border-bottom: 1px solid var(--border);
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #ddd;
     vertical-align: top;
   }
-  tr:nth-child(even) td { background: var(--paper-dark); }
 
-  /* ── REFERENCES ── */
   .references {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 2px solid var(--border);
+    margin-top: 2.5rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1.2rem;
+    font-size: 0.9rem;
   }
-  .references h2 { color: var(--muted); font-size: 1.2rem; }
-  .references ol {
-    padding-left: 1.4rem;
-    font-size: 0.88rem;
-    color: var(--muted);
-    line-height: 2.1;
-  }
-  .references a { color: var(--muted); }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--ink);
-    color: rgba(245,240,232,0.45);
-    text-align: center;
-    padding: 1.5rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    margin-top: 4rem;
-  }
-
-  @media (max-width: 600px) {
-    header { padding: 2rem 1rem 1.8rem; }
-    .callout { font-size: 0.75rem; }
-    table { font-size: 0.82rem; }
-    td, th { padding: 0.5rem 0.6rem; }
-  }
+  .references ol { padding-left: 1.3rem; line-height: 2; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-label">Seminarski rad &bull; Računalne mreže &bull; 4D / 4E</div>
-  <h1>Kriptografija u <em>računalnoj komunikaciji</em></h1>
-  <div class="header-meta">Uvod u računalne mreže &nbsp;<span class="ornament">✦</span>&nbsp; Školska godina 2025./2026.</div>
-</header>
+<h1>Kriptografija u računalnoj komunikaciji</h1>
+<div class="meta">Seminarski rad &mdash; Računalne mreže (4D/4E) &mdash; Školska godina 2025./2026.</div>
 
-<main class="page">
+<nav>
+  <p>Sadržaj</p>
+  <ol>
+    <li><a href="#uvod">Uvod</a></li>
+    <li><a href="#povijest">Kratka povijest kriptografije</a></li>
+    <li><a href="#simetricna">Simetrična kriptografija</a></li>
+    <li><a href="#asimetricna">Asimetrična kriptografija</a></li>
+    <li><a href="#hash">Hash funkcije i digitalni potpis</a></li>
+    <li><a href="#primjena">Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</a></li>
+    <li><a href="#zakljucak">Zaključak</a></li>
+    <li><a href="#reference">Popis izvora</a></li>
+  </ol>
+</nav>
 
-  <!-- TOC -->
-  <nav class="toc">
-    <div class="toc-title">Sadržaj</div>
-    <ol>
-      <li><a href="#uvod">Uvod</a></li>
-      <li><a href="#povijest">Kratka povijest kriptografije</a></li>
-      <li><a href="#simetricna">Simetrična kriptografija</a></li>
-      <li><a href="#asimetricna">Asimetrična kriptografija (kriptografija javnog ključa)</a></li>
-      <li><a href="#hash">Hash funkcije i digitalni potpis</a></li>
-      <li><a href="#primjena">Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</a></li>
-      <li><a href="#zakljucak">Zaključak</a></li>
-      <li><a href="#reference">Popis izvora</a></li>
-    </ol>
-  </nav>
+<h2 id="uvod">1. Uvod</h2>
+<p>
+  U digitalnom dobu svakodnevno šaljemo poruke, obavljamo bankovne transakcije i pristupamo osjetljivim sustavima putem interneta — a da pri tom najčešće uopće ne razmišljamo o tome tko bi sve mogao presresti te podatke. <a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">Kriptografija</a> je disciplina koja se bavi metodama zaštite podataka tako da ih neovlašteni korisnici ne mogu pročitati ni izmijeniti, čak i ako ih fizički presretnu.
+</p>
+<p>
+  Kriptografija nije novo otkriće — stara je gotovo koliko i pisana komunikacija. No tek su pojava računala i razvoj interneta doveli do procvata moderne, matematički utemeljene kriptografije kakvu poznajemo danas. Bez nje bi pojmovi poput sigurnog online plaćanja, privatnih poruka ili zaštićenih e-mail računa bili nezamislivi.
+</p>
+<p>
+  Ovaj rad objašnjava temeljne pojmove kriptografije, razlike između simetričnih i asimetričnih algoritama, ulogu hash funkcija te primjenu u protokolima koji čine osnovu sigurne mrežne komunikacije: TLS, HTTPS i VPN.
+</p>
 
-  <!-- 1. UVOD -->
-  <section id="uvod">
-    <h2>1. Uvod</h2>
-    <p>
-      U digitalnom dobu svakodnevno šaljemo poruke, obavljamo bankovne transakcije i pristupamo osjetljivim sustavima putem interneta — a da pri tom najčešće uopće ne razmišljamo o tome tko bi sve mogao presresti te podatke. <a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">Kriptografija</a> je znanstvena disciplina koja se bavi metodama zaštite podataka tako da ih neovlašteni korisnici ne mogu pročitati ni izmijeniti, čak i ako ih fizički presretnu.
-    </p>
-    <p>
-      Kriptografija nije novo otkriće — stara je gotovo koliko i pisana komunikacija. No tek su pojava računala i, posebno, razvoj interneta doveli do procvata moderne, matematički rigorozne kriptografije kakvu poznajemo danas. Bez nje bi pojmovi poput sigurnog online plaćanja, privatnih poruka ili zaštićenih e-mail računa bili posve nezamislivi.
-    </p>
-    <p>
-      Ovaj seminarski rad objašnjava temeljne pojmove kriptografije, razlike između simetričnih i asimetričnih algoritama, ulogu hash funkcija te konkretnu primjenu u protokolima koji čine osnovu sigurne mrežne komunikacije: <strong>TLS</strong>, <strong>HTTPS</strong> i <strong>VPN</strong>.
-    </p>
-  </section>
+<h2 id="povijest">2. Kratka povijest kriptografije</h2>
+<p>
+  Najstariji poznati primjer namjernog skrivanja poruke datira iz antičke Grčke — tzv. <em>skytale</em>, štap oko kojega se namotavala kožna traka s porukom. Rimljani su koristili <strong>Cezarov šifrat</strong>, jednostavnu zamjenu slova pomakom u abecedi.
+</p>
 
-  <!-- 2. POVIJEST -->
-  <section id="povijest">
-    <h2>2. Kratka povijest kriptografije</h2>
-    <p>
-      Najstariji poznati primjer namjernog skrivanja poruke datira još iz antičke Grčke — tzv. <em>skytale</em>, štap oko kojega se namotavala kožna traka s porukom. Rimljani su koristili <strong>Cezarov šifrat</strong>, jednostavnu zamjenu slova pomakom u abecedi (npr. A → D, B → E...).
-    </p>
+<pre>Primjer — Cezarov šifrat (pomak 3):
+Izvorni tekst:   M R E Z A
+Šifrirani tekst: P U H C D
 
-    <div class="callout">
-      <span class="tag">Primjer — Cezarov šifrat (pomak 3)</span>
-      Izvorni tekst: &nbsp; M R E Z A
-      Šifrirani tekst: P U H C D
+Svako slovo pomiče se za 3 mjesta naprijed u abecedi.</pre>
 
-      Svako slovo pomiče se za 3 mjesta naprijed u abecedi.
-    </div>
+<p>
+  Pravi zaokret donijelo je 20. stoljeće: nacistički <a href="https://hr.wikipedia.org/wiki/Enigma_(stroj)" target="_blank">Enigma stroj</a> koristio je mehaničke rotore za složenu zamjenu, a njegov je proboj od strane savezničkih kriptanalitičara (uključujući Alana Turinga) znatno ubrzao kraj Drugog svjetskog rata. Prava revolucija nastupila je 1976. kada su Diffie i Hellman objavili rad koji je postavio temelje kriptografije javnog ključa.
+</p>
 
-    <p>
-      Kroz srednji vijek kriptografske su metode postajale sve složenije. Pravi zaokret donijelo je 20. stoljeće: nacistički <a href="https://hr.wikipedia.org/wiki/Enigma_(stroj)" target="_blank">Enigma stroj</a> koristio je mehaničke rotore za generiranje iznimno složene zamjene, a njegov je proboj od strane savezničkih kriptanalitičara (uključujući Alana Turinga) znatno ubrzao kraj Drugog svjetskog rata.
-    </p>
-    <p>
-      Prava revolucija nastupila je 1976. kada su Whitfield Diffie i Martin Hellman objavili rad koji je postavio temelje <strong>kriptografije javnog ključa</strong> — modela koji i danas štiti gotovo sav promet na internetu.
-    </p>
-  </section>
+<h2 id="simetricna">3. Simetrična kriptografija</h2>
+<p>
+  Kod simetrične kriptografije isti se ključ koristi i za šifriranje i za dešifriranje podataka. Pošiljatelj i primatelj moraju unaprijed razmijeniti taj zajednički tajni ključ.
+</p>
 
-  <!-- 3. SIMETRICNA -->
-  <section id="simetricna">
-    <h2>3. Simetrična kriptografija</h2>
-    <p>
-      Kod simetrične kriptografije isti se ključ koristi i za šifriranje i za dešifriranje podataka. Pošiljatelj i primatelj moraju unaprijed razmjeniti taj zajednički tajni ključ sigurnim kanalom.
-    </p>
+<pre>Shema simetričnog šifriranja:
 
-    <h3>Kako funkcionira?</h3>
-    <p>
-      Zamislite zaključanu kutiju: i pošiljatelj i primatelj imaju isti ključ. Pošiljatelj zaključa poruku, pošalje kutiju, a primatelj je otvori istim ključem. Problem nastaje ako kutiju (ili ključ) netko presretne na putu.
-    </p>
+Poruka → [Tajni ključ K] → Šifrirana poruka → mreža → [Isti ključ K] → Poruka</pre>
 
-    <div class="callout">
-      <span class="tag">Shema simetričnog šifriranja</span>
-      Poruka (plaintext)
-        │
-        ▼  [Tajni ključ K]
-      Šifrirana poruka (ciphertext)  ──── mreža ────►
-                                                      │
-                                                ▼  [Isti ključ K]
-                                           Dešifrirana poruka
-    </div>
+<table>
+  <thead>
+    <tr><th>Algoritam</th><th>Duljina ključa</th><th>Status</th><th>Napomena</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>DES</td><td>56 bita</td><td>Zastario</td><td>Probijen brute-force napadom</td></tr>
+    <tr><td>3DES</td><td>168 bita</td><td>Zastario</td><td>Sporiji nasljednik DES-a</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES</a></td><td>128/192/256 bita</td><td>Standard</td><td>Koristi se svuda danas</td></tr>
+    <tr><td>ChaCha20</td><td>256 bita</td><td>Aktualan</td><td>Koristi se u TLS 1.3</td></tr>
+  </tbody>
+</table>
 
-    <h3>Najpoznatiji algoritmi</h3>
-    <table>
-      <thead>
-        <tr><th>Algoritam</th><th>Duljina ključa</th><th>Status</th><th>Napomena</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>DES</td><td>56 bita</td><td>Zastario</td><td>Probijen brute-force napadom</td></tr>
-        <tr><td>3DES</td><td>168 bita</td><td>Zastario</td><td>Sporiji, zamjena za DES</td></tr>
-        <tr><td><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES</a></td><td>128/192/256 bita</td><td>Standard</td><td>Koristi se svuda danas</td></tr>
-        <tr><td>ChaCha20</td><td>256 bita</td><td>Aktualan</td><td>Koristi se u TLS 1.3</td></tr>
-      </tbody>
-    </table>
+<p>
+  <strong>AES</strong> (Advanced Encryption Standard) danas je svjetski standard za simetričnu enkripciju, odobren od strane NIST-a 2001. godine. Koriste ga banke, vojska, oblačne usluge i praktički svaki sigurni protokol na internetu. Njegova najveća prednost je brzina — idealan je za šifriranje velikih količina podataka.
+</p>
+<p>
+  Glavni nedostatak simetričnih sustava je problem distribucije ključa: kako sigurno dostaviti ključ primatelju bez da ga itko presretne na putu?
+</p>
 
-    <p>
-      <strong>AES</strong> (Advanced Encryption Standard) danas je de facto svjetski standard za simetričnu enkripciju, odobren od strane američkog NIST-a 2001. godine. Koriste ga banke, vojska, oblačne usluge i praktički svaki sigurni protokol na internetu.
-    </p>
+<h2 id="asimetricna">4. Asimetrična kriptografija (kriptografija javnog ključa)</h2>
+<p>
+  Asimetrična kriptografija rješava problem distribucije ključeva. Svaki sudionik ima <strong>par ključeva</strong>: jedan javni (koji može vidjeti itko) i jedan privatni (koji se čuva u tajnosti). Poruka šifrirana javnim ključem primatelja može se dešifrirati isključivo njegovim privatnim ključem.
+</p>
 
-    <div class="infobox">
-      <strong>Prednosti:</strong> Iznimno brzo šifriranje i dešifriranje, idealno za velike količine podataka (npr. enkripcija diska, streaming).<br>
-      <strong>Nedostatak:</strong> Problem distribucije ključa — kako sigurno dostaviti ključ primatelju bez da ga itko presretne?
-    </div>
-  </section>
+<pre>Shema asimetričnog šifriranja:
 
-  <!-- 4. ASIMETRICNA -->
-  <section id="asimetricna">
-    <h2>4. Asimetrična kriptografija (kriptografija javnog ključa)</h2>
-    <p>
-      Asimetrična kriptografija rješava temeljni problem simetrične — sigurnu razmjenu ključeva. Svaki sudionik ima <strong>par ključeva</strong>: jedan javni (koji može vidjet i itko) i jedan privatni (koji se čuva u tajnosti).
-    </p>
-    <p>
-      Poruka šifrirana <em>javnim ključem</em> primatelja može se dešifrirati <em>isključivo</em> njegovim privatnim ključem. Matematičke operacije u pozadini (faktorizacija ogromnih prostih brojeva ili diskretni logaritam) su toliko složene da ih ni najbrža računala ne mogu razbiti u razumnom vremenu.
-    </p>
+Pošiljatelj šifrira Markovim JAVNIM ključem (dostupan svima)
+  → Šifrirana poruka putuje mrežom →
+    Marko dešifrira PRIVATNIM ključem (samo on ima!)</pre>
 
-    <div class="callout">
-      <span class="tag">Shema asimetričnog šifriranja</span>
-      Pošiljatelj zna Markov JAVNI ključ (dostupan svima)
-        │
-        ▼  šifrira poruku javnim ključem
-      Šifrirana poruka ──────────────────────────────►
-                                                      │
-                                            ▼  Marko dešifrira
-                                       PRIVATNIM ključem (samo on ima!)
-                                           Pročitana poruka ✓
-    </div>
+<h3>RSA algoritam</h3>
+<p>
+  <a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">RSA</a> (Rivest–Shamir–Adleman, 1977.) najpoznatiji je algoritam javnog ključa. Sigurnost se temelji na matematičkoj teškoći faktorizacije velikih prostih brojeva. Danas ga sve češće zamjenjuje kriptografija eliptičnih krivulja (ECC) koja uz istu razinu sigurnosti koristi znatno kraće ključeve — što je važno za mobilne uređaje.
+</p>
+<p>
+  U praksi, kad se spojite na HTTPS stranicu, vaš preglednik i poslužitelj koriste asimetričnu kriptografiju samo za dogovor oko simetričnog ključa koji se zatim koristi za sam prijenos podataka. Tako se kombiniraju prednosti obaju pristupa.
+</p>
 
-    <h3>RSA algoritam</h3>
-    <p>
-      <a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">RSA</a> (Rivest–Shamir–Adleman, 1977.) najpoznatiji je algoritam javnog ključa. Sigurnost se temelji na matematičkoj teškoći faktorizacije velikih prostih brojeva. Na primjer, lako je izračunati da je 17 × 19 = 323, ali dobiti natrag faktore iz broja koji ima stotinjak znamenki — izuzetno je teško.
-    </p>
-    <p>
-      Danas se RSA i dalje koristi za razmjenu ključeva i digitalne potpise, no sve ga češće zamjenjuje <strong>kriptografija eliptičnih krivulja</strong> (ECC) koja uz istu razinu sigurnosti koristi znatno kraće ključeve, što je ključno za mobilne i IoT uređaje s ograničenim resursima.
-    </p>
+<h2 id="hash">5. Hash funkcije i digitalni potpis</h2>
+<p>
+  <a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Kriptografska hash funkcija</a> pretvara podatke proizvoljne duljine u niz znakova fiksne duljine — tzv. <em>hash</em> ili <em>sažetak</em>. Proces je jednosmjeran: iz hasha nije moguće rekonstruirati izvorne podatke, a i najmanja promjena ulaznih podataka daje potpuno drugačiji rezultat.
+</p>
 
-    <div class="infobox">
-      <strong>Primjer iz prakse:</strong> Kad se spojite na neku HTTPS stranicu, vaš preglednik i poslužitelj koriste asimetričnu kriptografiju samo za <em>dogovor oko simetričnog ključa</em> koji će se zatim koristiti za sam prijenos podataka. Tako se kombiniraju prednosti obaju pristupa.
-    </div>
-  </section>
+<pre>Primjer — SHA-256:
+Ulaz: "Zdravo!"  →  a3b5c8d2e1f94a7b... (64 hex znaka)
+Ulaz: "Zdravo."  →  f92e1a04c7d38b91... (posve drugačiji!)</pre>
 
-  <!-- 5. HASH -->
-  <section id="hash">
-    <h2>5. Hash funkcije i digitalni potpis</h2>
-    <p>
-      <a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Kriptografska hash funkcija</a> pretvara podatke proizvoljne duljine u niz znakova fiksne duljine — tzv. <em>hash</em> ili <em>sažetak</em>. Taj je proces jednosmjeran: iz hasha nije moguće rekonstruirati izvorne podatke, a i najmanja promjena ulaznih podataka daje potpuno drugačiji hash.
-    </p>
+<p>
+  Digitalni potpis kombinira hash funkcije i asimetričnu kriptografiju. Pošiljatelj izračuna hash poruke i šifrira ga svojim privatnim ključem. Primatelj provjeri potpis javnim ključem i usporedi hash. Ako se podudaraju, poruka nije izmijenjena i sigurno dolazi od navedenog pošiljatelja. Digitalni potpisi temelj su <strong>digitalnih certifikata</strong> koje koristi svaka HTTPS stranica.
+</p>
 
-    <div class="callout">
-      <span class="tag">Primjer — SHA-256 hash</span>
-      Ulaz: "Zdravo!"
-      SHA-256: a3b5c8d2e1f94a7b... (64 hex znaka)
+<h2 id="primjena">6. Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</h2>
 
-      Ulaz: "Zdravo." (točka umjesto uskličnika)
-      SHA-256: f92e1a04c7d38b91... (posve drugačiji!)
-    </div>
+<h3>TLS i HTTPS</h3>
+<p>
+  <a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a> (Transport Layer Security) je protokol koji štiti gotovo sav osjetljiv promet na internetu. Kad vidite HTTPS u adresi preglednika, znači da je HTTP komunikacija zaštićena TLS-om. Proces uspostave veze (tzv. <em>TLS handshake</em>) obuhvaća razmjenu certifikata, provjeru identiteta poslužitelja i dogovor o zajedničkom simetričnom ključu — sve to u djeliću sekunde.
+</p>
 
-    <h3>Digitalni potpis</h3>
-    <p>
-      Digitalni potpis kombinira hash funkcije i asimetričnu kriptografiju. Pošiljatelj izračuna hash poruke, zatim ga šifrira <em>svojim privatnim ključem</em> — to je digitalni potpis. Primatelj može provjeriti potpis pošiljateljevim <em>javnim ključem</em> i usporediti hash. Ako se podudaraju, poruka nije izmijenjena i sigurno dolazi od navedenog pošiljatelja.
-    </p>
-    <p>
-      Digitalni potpisi temelj su <strong>digitalnih certifikata</strong> koje koristi svaka HTTPS stranica — dokumenata koje izdaju <em>tijela za certifikaciju</em> (npr. Let's Encrypt, DigiCert) kako bi potvrdili identitet vlasnika domene.
-    </p>
-  </section>
+<h3>VPN</h3>
+<p>
+  <a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">VPN</a> (Virtual Private Network) kriptografijom stvara siguran tunel kroz nesigurnu mrežu, npr. javni Wi-Fi. Svi podaci koji prolaze kroz tunel šifrirani su, a izvorna IP adresa korisnika skrivena je iza adrese VPN poslužitelja.
+</p>
 
-  <!-- 6. PRIMJENA -->
-  <section id="primjena">
-    <h2>6. Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</h2>
+<table>
+  <thead>
+    <tr><th>VPN protokol</th><th>Kriptografija</th><th>Primjena</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>OpenVPN</td><td>TLS / AES</td><td>Korporativne mreže, privatnost</td></tr>
+    <tr><td>WireGuard</td><td>ChaCha20, Curve25519</td><td>Moderni, brzi VPN</td></tr>
+    <tr><td>IPsec / IKEv2</td><td>AES, RSA</td><td>Mobilni uređaji, poslovne mreže</td></tr>
+  </tbody>
+</table>
 
-    <h3>TLS i HTTPS</h3>
-    <p>
-      <a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a> (Transport Layer Security) protokol koji štiti gotovo sav osjetljiv promet na internetu. Djeluje između transportnog i aplikacijskog sloja OSI modela. Kad vidite <strong>HTTPS</strong> u adresi preglednika, to znači da je HTTP komunikacija zaštićena TLS-om.
-    </p>
-    <p>
-      Proces uspostave TLS veze (tzv. <em>TLS handshake</em>) odvija se u nekoliko koraka: razmjena certifikata, provjera identiteta poslužitelja, dogovor o algoritmima i generiranje zajedničkog simetričnog ključa. Sve to traje manje od sekunde, a zatim se svi podaci šifriraju i dešifriraju brzim simetričnim algoritmima (npr. AES-256 ili ChaCha20).
-    </p>
+<h3>Kriptografija u 5G mrežama</h3>
+<p>
+  Novi standard 5G donio je i unapređenja u kriptografiji. Za razliku od starijih generacija, 5G koristi <em>SUCI</em> (Subscription Concealed Identifier) koji skriva pravi identifikator uređaja šifriranjem eliptičnim krivuljama, čime se onemogućava praćenje uređaja putem lažnih baznih stanica (tzv. IMSI catchera).
+</p>
 
-    <h3>VPN (Virtualna privatna mreža)</h3>
-    <p>
-      <a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">VPN</a> (Virtual Private Network) kriptografijom stvara siguran tunel kroz nesigurnu mrežu (npr. javni Wi-Fi ili internet). Svi podaci koji prolaze kroz tunel šifrirani su, a izvorna IP adresa korisnika skrivena je iza adrese VPN poslužitelja.
-    </p>
+<h2 id="zakljucak">7. Zaključak</h2>
+<p>
+  Kriptografija je nevidljivi temelj na kojemu stoji cijeli moderni internet. Bez nje ne bi bilo sigurnog online bankarstva, privatnih poruka ni zaštićenih lozinki. Svaki put kad otvorimo HTTPS stranicu, koristimo VPN ili platimo nešto karticom online — kriptografski algoritmi tiho rade u pozadini i štite naše podatke.
+</p>
+<p>
+  Moderna kriptografija nije jedna tehnika nego cijeli ekosustav: simetrični algoritmi (AES) za brzu enkripciju, asimetrični algoritmi (RSA, ECC) za sigurnu razmjenu ključeva, hash funkcije za provjeru integriteta i digitalni potpisi za autentifikaciju. Svi ti elementi zajedno grade protokole poput TLS-a i VPN-a koji svakodnevno osiguravaju privatnost na mreži.
+</p>
+<p>
+  S razvojem kvantnih računala javlja se nova prijetnja — kvantni računali mogli bi razbiti RSA i ECC. Upravo zbog toga istraživači već razvijaju tzv. <em>post-kvantne kriptografske algoritme</em> koji bi bili sigurni čak i od takvih napada. Kriptografija se dakle neprestano razvija kako bi ostala korak ispred prijetnji.
+</p>
 
-    <table>
-      <thead>
-        <tr><th>VPN protokol</th><th>Kriptografija</th><th>Primjena</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>OpenVPN</td><td>TLS/AES</td><td>Korporativne mreže, privatnost</td></tr>
-        <tr><td>WireGuard</td><td>ChaCha20, Curve25519</td><td>Moderni, brzi VPN</td></tr>
-        <tr><td>IPsec/IKEv2</td><td>AES, RSA</td><td>Mobilni uređaji, poslovne mreže</td></tr>
-        <tr><td>L2TP/IPsec</td><td>AES</td><td>Starije implementacije</td></tr>
-      </tbody>
-    </table>
-
-    <p>
-      VPN tehnologija posebno je važna za zaposlenike koji rade od kuće (remote work) — omogućava im siguran pristup internim sustavima tvrtke kao da su fizički prisutni u uredu.
-    </p>
-
-    <h3>Veza s 5G mrežama</h3>
-    <p>
-      Novi standard <strong>5G</strong> donio je i snažna unapređenja u kriptografiji. Za razliku od starijih generacija, 5G koristi <em>SUCI</em> (Subscription Concealed Identifier) koji skriva pravi identifikator uređaja šifriranjem uz pomoć kriptografije eliptičnih krivulja, čime se onemogućava presretanje i praćenje uređaja putem lažnih baznih stanica (<em>IMSI catcheri</em>).
-    </p>
-  </section>
-
-  <!-- 7. ZAKLJUČAK -->
-  <section id="zakljucak">
-    <h2>7. Zaključak</h2>
-    <p>
-      Kriptografija je nevidljivi temelj na kojemu stoji cijeli moderni internet. Bez nje ne bi bilo sigurnog online bankarstva, privatnih poruka, zaštićenih lozinki ni povjerljivih poslovnih komunikacija. Svaki put kad otvorimo HTTPS stranicu, pošaljemo poruku kroz VPN ili platimo nešto karticom online — kriptografski algoritmi tiho rade u pozadini, štiteći naše podatke.
-    </p>
-    <p>
-      Kao što smo vidjeli, moderna kriptografija nije samo jedna tehnika — to je cijeli ekosustav: simetrični algoritmi (AES) za brzu enkripciju podataka, asimetrični algoritmi (RSA, ECC) za sigurnu razmjenu ključeva, hash funkcije za provjeru integriteta i digitalni potpisi za autentifikaciju. Svi ti elementi zajedno čine protokole poput TLS-a i VPN-a koji nam svakodnevno osiguravaju privatnost na mreži.
-    </p>
-    <p>
-      S razvojem kvantnih računala javlja se i nova prijetnja — kvantni računali mogli bi relativno brzo razbiti RSA i ECC. Upravo zbog toga istraživači već sada razvijaju tzv. <em>post-kvantne kriptografske algoritme</em> koji bi bili sigurni čak i od ovakvih napada. Kriptografija, dakle, nije statična disciplina — neprestano se razvija kako bi ostala korak ispred prijetnji.
-    </p>
-  </section>
-
-  <!-- REFERENCE -->
-  <section class="references" id="reference">
-    <h2>Popis izvora i korisnih poveznica</h2>
-    <ol>
-      <li>
-        <a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">
-          Wikipedia – Kriptografija (hr)
-        </a>
-      </li>
-      <li>
-        <a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">
-          Wikipedia – Transport Layer Security (TLS)
-        </a>
-      </li>
-      <li>
-        <a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">
-          Wikipedia – RSA kriptosustav (hr)
-        </a>
-      </li>
-      <li>
-        <a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">
-          Wikipedia – Virtualna privatna mreža / VPN (hr)
-        </a>
-      </li>
-      <li>
-        <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">
-          Wikipedia – Advanced Encryption Standard / AES (en)
-        </a>
-      </li>
-      <li>
-        <a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">
-          Wikipedia – Kriptografska hash funkcija (hr)
-        </a>
-      </li>
-      <li>
-        <a href="https://www.cloudflare.com/learning/ssl/what-is-ssl/" target="_blank">
-          Cloudflare Learning – What is SSL/TLS?
-        </a>
-      </li>
-      <li>
-        <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-vpn/" target="_blank">
-          Cloudflare Learning – What is a VPN?
-        </a>
-      </li>
-    </ol>
-  </section>
-
-</main>
-
-<footer>
-  Seminarski rad iz kolegija Računalne mreže &nbsp;✦&nbsp; 4D / 4E &nbsp;✦&nbsp; 2025./2026.
-</footer>
+<div class="references" id="reference">
+  <h2>Popis izvora</h2>
+  <ol>
+    <li><a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">Wikipedia – Kriptografija (hr)</a></li>
+    <li><a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">Wikipedia – Transport Layer Security (hr)</a></li>
+    <li><a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">Wikipedia – RSA kriptosustav (hr)</a></li>
+    <li><a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">Wikipedia – Virtualna privatna mreža / VPN (hr)</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">Wikipedia – Advanced Encryption Standard / AES (en)</a></li>
+    <li><a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Wikipedia – Kriptografska hash funkcija (hr)</a></li>
+    <li><a href="https://www.cloudflare.com/learning/ssl/what-is-ssl/" target="_blank">Cloudflare Learning – What is SSL/TLS?</a></li>
+    <li><a href="https://www.cloudflare.com/learning/network-layer/what-is-a-vpn/" target="_blank">Cloudflare Learning – What is a VPN?</a></li>
+  </ol>
+</div>
 
 </body>
-</html>
-</body>
-
-
-
 </html>
