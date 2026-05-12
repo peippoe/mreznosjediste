@@ -97,7 +97,7 @@
 <body>
 
 <h1>Kriptografija u računalnoj komunikaciji</h1>
-<div class="meta">Seminarski rad &mdash; Računalne mreže (4D/4E) &mdash; Školska godina 2025./2026.</div>
+<div class="meta">Seminarski rad &mdash; Računalne mreže &mdash; Školska godina 2025./2026.</div>
 
 <nav>
   <p>Sadržaj</p>
@@ -105,8 +105,8 @@
     <li><a href="#uvod">Uvod</a></li>
     <li><a href="#povijest">Kratka povijest kriptografije</a></li>
     <li><a href="#simetricna">Simetrična kriptografija</a></li>
-    <li><a href="#asimetricna">Asimetrična kriptografija</a></li>
-    <li><a href="#hash">Hash funkcije i digitalni potpis</a></li>
+    <li><a href="#asimetricna">Asimetrična kriptografija (kriptografija javnog ključa)</a></li>
+    <li><a href="#hash">Funkcije sažimanja i digitalni potpis</a></li>
     <li><a href="#primjena">Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</a></li>
     <li><a href="#zakljucak">Zaključak</a></li>
     <li><a href="#reference">Popis izvora</a></li>
@@ -115,100 +115,112 @@
 
 <h2 id="uvod">1. Uvod</h2>
 <p>
-  U digitalnom dobu svakodnevno šaljemo poruke, obavljamo bankovne transakcije i pristupamo osjetljivim sustavima putem interneta — a da pri tom najčešće uopće ne razmišljamo o tome tko bi sve mogao presresti te podatke. <a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">Kriptografija</a> je disciplina koja se bavi metodama zaštite podataka tako da ih neovlašteni korisnici ne mogu pročitati ni izmijeniti, čak i ako ih fizički presretnu.
+  U digitalnom dobu svakodnevno šaljemo poruke, obavljamo bankovne transakcije i pristupamo osjetljivim sustavima putem interneta — pri čemu se rijetko zapitamo tko bi sve mogao presresti te podatke na putu do odredišta. <a href="https://hr.wikipedia.org/wiki/Kriptografija" target="_blank">Kriptografija</a> je znanstvena disciplina koja se bavi metodama zaštite podataka kako bi ih neovlaštene strane bile nesposobne pročitati ili izmijeniti, čak i u slučaju njihova fizičkog presretanja.
 </p>
 <p>
-  Kriptografija nije novo otkriće — stara je gotovo koliko i pisana komunikacija. No tek su pojava računala i razvoj interneta doveli do procvata moderne, matematički utemeljene kriptografije kakvu poznajemo danas. Bez nje bi pojmovi poput sigurnog online plaćanja, privatnih poruka ili zaštićenih e-mail računa bili nezamislivi.
+  Kriptografija nije moderni izum — stara je gotovo koliko i pisana komunikacija. No tek su pojava računala i razvoj interneta pokrenuli procvat moderne, matematički utemeljene kriptografije kakvu danas poznajemo. Bez nje pojmovi poput sigurnog mrežnog plaćanja, zaštićene elektroničke pošte ili privatnih poruka ne bi bili ostvarivi.
 </p>
 <p>
-  Ovaj rad objašnjava temeljne pojmove kriptografije, razlike između simetričnih i asimetričnih algoritama, ulogu hash funkcija te primjenu u protokolima koji čine osnovu sigurne mrežne komunikacije: TLS, HTTPS i VPN.
+  Ovaj rad objašnjava temeljne pojmove kriptografije, razlike između simetričnih i asimetričnih algoritama, ulogu funkcija sažimanja te primjenu kriptografskih postupaka u protokolima koji čine osnovu sigurne mrežne komunikacije: TLS, HTTPS i VPN.
 </p>
 
 <h2 id="povijest">2. Kratka povijest kriptografije</h2>
 <p>
-  Najstariji poznati primjer namjernog skrivanja poruke datira iz antičke Grčke — tzv. <em>skytale</em>, štap oko kojega se namotavala kožna traka s porukom. Rimljani su koristili <strong>Cezarov šifrat</strong>, jednostavnu zamjenu slova pomakom u abecedi.
+  Najstariji poznati primjer namjernog skrivanja poruke datira iz antičke Grčke — tzv. <em>skytale</em>, štap oko kojega se namotavala kožna traka s porukom koja je bila čitljiva jedino omotana oko štapa iste debljine. Rimljani su koristili <strong>Cezarov supstitucijski šifar</strong>, jednostavnu zamjenu slova pomakom u abecedi.
 </p>
 
-<pre>Primjer — Cezarov šifrat (pomak 3):
-Izvorni tekst:   M R E Z A
+<pre>Primjer — Cezarov supstitucijski šifar (pomak 3):
+Otvoreni tekst:  M R E Z A
 Šifrirani tekst: P U H C D
 
 Svako slovo pomiče se za 3 mjesta naprijed u abecedi.</pre>
 
 <p>
-  Pravi zaokret donijelo je 20. stoljeće: nacistički <a href="https://hr.wikipedia.org/wiki/Enigma_(stroj)" target="_blank">Enigma stroj</a> koristio je mehaničke rotore za složenu zamjenu, a njegov je proboj od strane savezničkih kriptanalitičara (uključujući Alana Turinga) znatno ubrzao kraj Drugog svjetskog rata. Prava revolucija nastupila je 1976. kada su Diffie i Hellman objavili rad koji je postavio temelje kriptografije javnog ključa.
+  Pravi zaokret donijelo je 20. stoljeće: nacistički <a href="https://hr.wikipedia.org/wiki/Enigma_(stroj)" target="_blank">stroj Enigma</a> koristio je mehaničke rotore za iznimno složenu supstituciju, a njegovo je dešifriranje od strane savezničkih kriptanalitičara — uključujući Alana Turinga — znatno ubrzalo kraj Drugog svjetskog rata.
+</p>
+<p>
+  Prava revolucija u kriptografiji nastupila je 1976. godine kada su Whitfield Diffie i Martin Hellman objavili rad <em>„New Directions in Cryptography"</em> u časopisu IEEE Transactions on Information Theory, čime su udarili temelje <strong>kriptografije javnog ključa</strong> — modela koji i danas štiti gotovo cjelokupan promet na internetu.
 </p>
 
 <h2 id="simetricna">3. Simetrična kriptografija</h2>
 <p>
-  Kod simetrične kriptografije isti se ključ koristi i za šifriranje i za dešifriranje podataka. Pošiljatelj i primatelj moraju unaprijed razmijeniti taj zajednički tajni ključ.
+  U simetričnoj kriptografiji isti se kriptografski ključ primjenjuje i za šifriranje i za dešifriranje podataka. Pošiljatelj i primatelj moraju unaprijed razmijeniti taj zajednički tajni ključ sigurnim kanalom — što je ujedno i temeljni nedostatak ovakvog pristupa.
 </p>
 
 <pre>Shema simetričnog šifriranja:
 
-Poruka → [Tajni ključ K] → Šifrirana poruka → mreža → [Isti ključ K] → Poruka</pre>
+Otvoreni tekst → [Tajni ključ K] → Šifrirani tekst → mreža → [Isti ključ K] → Otvoreni tekst</pre>
 
 <table>
   <thead>
     <tr><th>Algoritam</th><th>Duljina ključa</th><th>Status</th><th>Napomena</th></tr>
   </thead>
   <tbody>
-    <tr><td>DES</td><td>56 bita</td><td>Zastario</td><td>Probijen brute-force napadom</td></tr>
-    <tr><td>3DES</td><td>168 bita</td><td>Zastario</td><td>Sporiji nasljednik DES-a</td></tr>
-    <tr><td><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES</a></td><td>128/192/256 bita</td><td>Standard</td><td>Koristi se svuda danas</td></tr>
-    <tr><td>ChaCha20</td><td>256 bita</td><td>Aktualan</td><td>Koristi se u TLS 1.3</td></tr>
+    <tr><td>DES</td><td>56 bita</td><td>Zastario</td><td>Probijen napadom grubom silom (1998.)</td></tr>
+    <tr><td>3DES</td><td>168 bita</td><td>Zastario</td><td>Trostruka primjena DES-a; sporiji i napušten</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">AES</a></td><td>128 / 192 / 256 bita</td><td>Važeći standard</td><td>Prihvaćen kao FIPS 197 u studenom 2001.</td></tr>
+    <tr><td>ChaCha20</td><td>256 bita</td><td>Aktualan</td><td>Primjenjuje se u TLS 1.3, osobito na mobilnim uređajima</td></tr>
   </tbody>
 </table>
 
 <p>
-  <strong>AES</strong> (Advanced Encryption Standard) danas je svjetski standard za simetričnu enkripciju, odobren od strane NIST-a 2001. godine. Koriste ga banke, vojska, oblačne usluge i praktički svaki sigurni protokol na internetu. Njegova najveća prednost je brzina — idealan je za šifriranje velikih količina podataka.
+  <strong>AES</strong> (Advanced Encryption Standard), poznat i pod izvornim belgijskim nazivom Rijndael, razvili su kriptografi Joan Daemen i Vincent Rijmen. NIST ga je proglasio federalnim standardom SAD-a (FIPS 197) 26. studenog 2001., a na snagu je stupio 26. svibnja 2002. Koristi se gotovo svugdje — u bankarskim sustavima, vojnoj komunikaciji, pohrani podataka u oblaku i svakom relevantnom sigurnosnom protokolu na internetu.
 </p>
 <p>
-  Glavni nedostatak simetričnih sustava je problem distribucije ključa: kako sigurno dostaviti ključ primatelju bez da ga itko presretne na putu?
+  Glavni nedostatak simetričnih kriptosustava jest <strong>problem distribucije ključa</strong>: kako sigurno dostaviti tajni ključ primatelju bez opasnosti da ga netko presretne? Upravo taj problem rješava asimetrična kriptografija.
 </p>
 
 <h2 id="asimetricna">4. Asimetrična kriptografija (kriptografija javnog ključa)</h2>
 <p>
-  Asimetrična kriptografija rješava problem distribucije ključeva. Svaki sudionik ima <strong>par ključeva</strong>: jedan javni (koji može vidjeti itko) i jedan privatni (koji se čuva u tajnosti). Poruka šifrirana javnim ključem primatelja može se dešifrirati isključivo njegovim privatnim ključem.
+  Asimetrična kriptografija zaobilazi problem distribucije ključa uvođenjem <strong>para ključeva</strong>: javnog i privatnog. Javni ključ slobodno se objavljuje i svima je dostupan, dok se privatni ključ strogo čuva u tajnosti. Poruka šifrirana javnim ključem primatelja može se dešifrirati isključivo odgovarajućim privatnim ključem — a iz samog javnog ključa nije računski izvedivo odrediti privatni.
 </p>
 
 <pre>Shema asimetričnog šifriranja:
 
-Pošiljatelj šifrira Markovim JAVNIM ključem (dostupan svima)
-  → Šifrirana poruka putuje mrežom →
-    Marko dešifrira PRIVATNIM ključem (samo on ima!)</pre>
+Pošiljatelj šifrira Markovim JAVNIM ključem (javno dostupnim)
+  → Šifrirani tekst putuje mrežom →
+    Marko dešifrira isključivo svojim PRIVATNIM ključem</pre>
 
 <h3>RSA algoritam</h3>
 <p>
-  <a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">RSA</a> (Rivest–Shamir–Adleman, 1977.) najpoznatiji je algoritam javnog ključa. Sigurnost se temelji na matematičkoj teškoći faktorizacije velikih prostih brojeva. Danas ga sve češće zamjenjuje kriptografija eliptičnih krivulja (ECC) koja uz istu razinu sigurnosti koristi znatno kraće ključeve — što je važno za mobilne uređaje.
+  <a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">RSA</a> (Rivest, Shamir, Adleman — 1977.) najrasprostranjeniji je algoritam javnog ključa. Njegova sigurnost počiva na računskoj težini faktorizacije umnošaka velikih prostih brojeva: umnožak je lako izračunati, ali faktorizacija broja s nekoliko stotina znamenki danas nije izvediva ni na najsnažnijim dostupnim računalima.
 </p>
 <p>
-  U praksi, kad se spojite na HTTPS stranicu, vaš preglednik i poslužitelj koriste asimetričnu kriptografiju samo za dogovor oko simetričnog ključa koji se zatim koristi za sam prijenos podataka. Tako se kombiniraju prednosti obaju pristupa.
+  Sve učestalija alternativa RSA-u jest <strong>kriptografija eliptičnih krivulja</strong> (ECC — Elliptic Curve Cryptography). ECC postiže jednaku razinu sigurnosti uz znatno kraće ključeve, što je posebno važno za uređaje s ograničenim računskim resursima, primjerice pametne telefone i IoT uređaje.
+</p>
+<p>
+  U praksi, asimetrična kriptografija uglavnom se ne primjenjuje za izravno šifriranje poruka — to bi bilo previše računski zahtjevno. Umjesto toga, koristi se isključivo za siguran dogovor o zajedničkom simetričnom ključu, koji zatim preuzima brzu enkripciju samog sadržaja. Taj kombinirani pristup naziva se <em>hibridna kriptografija</em>.
 </p>
 
-<h2 id="hash">5. Hash funkcije i digitalni potpis</h2>
+<h2 id="hash">5. Funkcije sažimanja i digitalni potpis</h2>
 <p>
-  <a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Kriptografska hash funkcija</a> pretvara podatke proizvoljne duljine u niz znakova fiksne duljine — tzv. <em>hash</em> ili <em>sažetak</em>. Proces je jednosmjeran: iz hasha nije moguće rekonstruirati izvorne podatke, a i najmanja promjena ulaznih podataka daje potpuno drugačiji rezultat.
+  <a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Kriptografska funkcija sažimanja</a> (eng. <em>cryptographic hash function</em>) preslikava ulazni niz podataka proizvoljne duljine u izlazni niz fiksne duljine — tzv. <em>sažetak</em> (eng. <em>hash</em> ili <em>digest</em>). Postupak je jednosmjeran: iz sažetka nije moguće rekonstruirati izvorne podatke, a i najmanji zahvat u ulaznim podacima daje posve drugačiji sažetak.
 </p>
 
 <pre>Primjer — SHA-256:
-Ulaz: "Zdravo!"  →  a3b5c8d2e1f94a7b... (64 hex znaka)
-Ulaz: "Zdravo."  →  f92e1a04c7d38b91... (posve drugačiji!)</pre>
+Ulaz: "Zdravo!"  →  a3b5c8d2e1f94a7b... (64 heksadecimalna znaka)
+Ulaz: "Zdravo."  →  f92e1a04c7d38b91... (posve drugačiji sažetak!)</pre>
 
 <p>
-  Digitalni potpis kombinira hash funkcije i asimetričnu kriptografiju. Pošiljatelj izračuna hash poruke i šifrira ga svojim privatnim ključem. Primatelj provjeri potpis javnim ključem i usporedi hash. Ako se podudaraju, poruka nije izmijenjena i sigurno dolazi od navedenog pošiljatelja. Digitalni potpisi temelj su <strong>digitalnih certifikata</strong> koje koristi svaka HTTPS stranica.
+  <strong>Digitalni potpis</strong> spaja funkcije sažimanja i asimetričnu kriptografiju radi provjere autentičnosti i cjelovitosti podataka. Pošiljatelj izračuna sažetak poruke i potom ga šifrira <em>svojim privatnim ključem</em> — to čini digitalni potpis. Primatelj provjeri potpis pošiljateljevim <em>javnim ključem</em> i usporedi sažetke: ako se podudaraju, poruka nije izmijenjena i nedvojbeno potječe od navedenog pošiljatelja.
+</p>
+<p>
+  Digitalni potpisi osnova su <strong>digitalnih certifikata</strong> prema standardu X.509. Certifikate izdaju <em>tijela za certificiranje</em> (CA — Certificate Authority), kao što su Let's Encrypt ili DigiCert, i njima se potvrđuje identitet vlasnika neke internetske domene. Upravo na tom mehanizmu počiva povjerenje koje iskazujemo svakoj HTTPS stranici.
 </p>
 
 <h2 id="primjena">6. Primjena u mrežnoj komunikaciji — TLS, VPN, HTTPS</h2>
 
 <h3>TLS i HTTPS</h3>
 <p>
-  <a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a> (Transport Layer Security) je protokol koji štiti gotovo sav osjetljiv promet na internetu. Kad vidite HTTPS u adresi preglednika, znači da je HTTP komunikacija zaštićena TLS-om. Proces uspostave veze (tzv. <em>TLS handshake</em>) obuhvaća razmjenu certifikata, provjeru identiteta poslužitelja i dogovor o zajedničkom simetričnom ključu — sve to u djeliću sekunde.
+  <a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a> (Transport Layer Security) kriptografski je protokol koji osigurava povjerljivost, cjelovitost i autentičnost podataka u prijenosu. Smješten je između transportnog i aplikacijskog sloja OSI modela. Kada adresna traka preglednika prikazuje prefiks <strong>HTTPS</strong>, to znači da se HTTP komunikacija odvija unutar TLS-ove zaštićene sesije.
+</p>
+<p>
+  Uspostava TLS veze odvija se kroz tzv. <em>rukovanje</em> (eng. <em>handshake</em>): strane razmjenjuju certifikate, dogovaraju kriptografske algoritme te generiraju zajednički simetrični ključ sesije. Sav daljnji promet šifrira se tim simetričnim ključem — u TLS 1.3 (2018.) to su isključivo AES-GCM ili ChaCha20-Poly1305. Starije inačice protokola, SSL i TLS 1.0/1.1, danas se smatraju nesigurnima i praktički su svugdje onemogućene.
 </p>
 
 <h3>VPN</h3>
 <p>
-  <a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">VPN</a> (Virtual Private Network) kriptografijom stvara siguran tunel kroz nesigurnu mrežu, npr. javni Wi-Fi. Svi podaci koji prolaze kroz tunel šifrirani su, a izvorna IP adresa korisnika skrivena je iza adrese VPN poslužitelja.
+  <a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">VPN</a> (Virtual Private Network — virtualna privatna mreža) kriptografijom uspostavlja siguran tunel kroz nesigurnu javnu mrežu. Sav promet koji prolazi kroz tunel šifriran je, a izvorna IP adresa korisnika skrivena je iza adrese VPN poslužitelja. VPN se primjenjuje u korporativnom okruženju za sigurni udaljeni pristup internim sustavima, ali i za zaštitu privatnosti na javnim bežičnim mrežama.
 </p>
 
 <table>
@@ -216,26 +228,30 @@ Ulaz: "Zdravo."  →  f92e1a04c7d38b91... (posve drugačiji!)</pre>
     <tr><th>VPN protokol</th><th>Kriptografija</th><th>Primjena</th></tr>
   </thead>
   <tbody>
-    <tr><td>OpenVPN</td><td>TLS / AES</td><td>Korporativne mreže, privatnost</td></tr>
-    <tr><td>WireGuard</td><td>ChaCha20, Curve25519</td><td>Moderni, brzi VPN</td></tr>
-    <tr><td>IPsec / IKEv2</td><td>AES, RSA</td><td>Mobilni uređaji, poslovne mreže</td></tr>
+    <tr><td>OpenVPN</td><td>TLS / AES</td><td>Korporativne mreže i privatna upotreba</td></tr>
+    <tr><td>WireGuard</td><td>ChaCha20, Curve25519, Poly1305</td><td>Moderan i brz protokol, jednostavna implementacija</td></tr>
+    <tr><td>IPsec / IKEv2</td><td>AES, RSA / ECC</td><td>Mobilni uređaji, poslovne mreže</td></tr>
+    <tr><td>L2TP / IPsec</td><td>AES</td><td>Starije implementacije; sve rjeđe u upotrebi</td></tr>
   </tbody>
 </table>
 
-<h3>Kriptografija u 5G mrežama</h3>
+<h3>Kriptografija u mrežama 5. generacije (5G)</h3>
 <p>
-  Novi standard 5G donio je i unapređenja u kriptografiji. Za razliku od starijih generacija, 5G koristi <em>SUCI</em> (Subscription Concealed Identifier) koji skriva pravi identifikator uređaja šifriranjem eliptičnim krivuljama, čime se onemogućava praćenje uređaja putem lažnih baznih stanica (tzv. IMSI catchera).
+  Standard <strong>5G</strong> donio je i znatna unapređenja na polju kriptografske zaštite korisničkih identiteta. U mrežama prethodnih generacija korisničke su se identifikacijske oznake (IMSI) prenosile nezaštićeno, što je napadačima omogućavalo praćenje korisnika putem lažnih baznih stanica — tzv. <em>IMSI hvatača</em>.
+</p>
+<p>
+  Standard 5G uvodi <strong>SUCI</strong> (Subscription Concealed Identifier), mehanizam koji skriva pravi identifikator pretplatnika šifriranjem temeljenim na kriptografiji eliptičnih krivulja. Time se lažnoj baznoj stanici onemogućuje dohvat stvarnog identiteta korisnika, čime se razina zaštite privatnosti u bežičnoj komunikaciji bitno podiže u odnosu na prethodne generacije.
 </p>
 
 <h2 id="zakljucak">7. Zaključak</h2>
 <p>
-  Kriptografija je nevidljivi temelj na kojemu stoji cijeli moderni internet. Bez nje ne bi bilo sigurnog online bankarstva, privatnih poruka ni zaštićenih lozinki. Svaki put kad otvorimo HTTPS stranicu, koristimo VPN ili platimo nešto karticom online — kriptografski algoritmi tiho rade u pozadini i štite naše podatke.
+  Kriptografija je nevidljivi, ali nezaobilazni temelj na kojemu počiva cijeli suvremeni internet. Bez nje ne bi bio moguć ni siguran mrežni prijenos podataka, ni zaštita korisničkih identiteta, ni digitalno potpisivanje dokumenata. Svaki put kada otvorimo HTTPS stranicu, uspostavimo VPN tunel ili obavimo transakciju karticom — kriptografski algoritmi nevidljivo rade u pozadini i osiguravaju povjerljivost i cjelovitost naših podataka.
 </p>
 <p>
-  Moderna kriptografija nije jedna tehnika nego cijeli ekosustav: simetrični algoritmi (AES) za brzu enkripciju, asimetrični algoritmi (RSA, ECC) za sigurnu razmjenu ključeva, hash funkcije za provjeru integriteta i digitalni potpisi za autentifikaciju. Svi ti elementi zajedno grade protokole poput TLS-a i VPN-a koji svakodnevno osiguravaju privatnost na mreži.
+  Suvremena kriptografija nije jedna tehnika, nego cjelovit ekosustav međusobno nadopunjujućih postupaka: simetrični algoritmi (AES, ChaCha20) za brzu enkripciju velikih količina podataka, asimetrični algoritmi (RSA, ECC) za sigurnu razmjenu ključeva i digitalne potpise, te funkcije sažimanja (SHA-256 i dr.) za provjeru cjelovitosti. Upravo kombinacijom tih elemenata nastaju pouzdani protokoli poput TLS-a i VPN-a.
 </p>
 <p>
-  S razvojem kvantnih računala javlja se nova prijetnja — kvantni računali mogli bi razbiti RSA i ECC. Upravo zbog toga istraživači već razvijaju tzv. <em>post-kvantne kriptografske algoritme</em> koji bi bili sigurni čak i od takvih napada. Kriptografija se dakle neprestano razvija kako bi ostala korak ispred prijetnji.
+  Na horizontu se nazire nova prijetnja: kvantna računala, za koja se procjenjuje da bi mogla efikasno razbiti RSA i kriptografiju eliptičnih krivulja. U tu svrhu NIST već od 2016. provodi postupak standardizacije tzv. <em>postkvantnnih kriptografskih algoritama</em> (Post-Quantum Cryptography), a 2024. objavio je prve standarde toga tipa. To jasno pokazuje da kriptografija nije statična disciplina — ona se kontinuirano razvija kako bi ostala korak ispred postojećih i budućih prijetnji.
 </p>
 
 <div class="references" id="reference">
@@ -245,8 +261,10 @@ Ulaz: "Zdravo."  →  f92e1a04c7d38b91... (posve drugačiji!)</pre>
     <li><a href="https://hr.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">Wikipedia – Transport Layer Security (hr)</a></li>
     <li><a href="https://hr.wikipedia.org/wiki/RSA_(kriptosustav)" target="_blank">Wikipedia – RSA kriptosustav (hr)</a></li>
     <li><a href="https://hr.wikipedia.org/wiki/Virtualna_privatna_mre%C5%BEa" target="_blank">Wikipedia – Virtualna privatna mreža / VPN (hr)</a></li>
+    <li><a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Wikipedia – Kriptografska funkcija sažimanja (hr)</a></li>
     <li><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">Wikipedia – Advanced Encryption Standard / AES (en)</a></li>
-    <li><a href="https://hr.wikipedia.org/wiki/Kriptografska_hash_funkcija" target="_blank">Wikipedia – Kriptografska hash funkcija (hr)</a></li>
+    <li><a href="https://www.nist.gov/publications/advanced-encryption-standard-aes" target="_blank">NIST – FIPS 197: Advanced Encryption Standard (AES)</a></li>
+    <li><a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank">NIST – Post-Quantum Cryptography standardization</a></li>
     <li><a href="https://www.cloudflare.com/learning/ssl/what-is-ssl/" target="_blank">Cloudflare Learning – What is SSL/TLS?</a></li>
     <li><a href="https://www.cloudflare.com/learning/network-layer/what-is-a-vpn/" target="_blank">Cloudflare Learning – What is a VPN?</a></li>
   </ol>
